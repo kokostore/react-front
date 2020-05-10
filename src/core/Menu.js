@@ -2,6 +2,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth";
+import * as Icon from 'react-feather';
 
 const isActive = (history, path) => {
     if (history.location.pathname === path) return { color: "#ff9900" };
@@ -17,7 +18,7 @@ const Menu = ({ history }) => (
                     style={isActive(history, "/")}
                     to="/"
                 >
-                    Home
+                     <Icon.Home />
                 </Link>
             </li>
 
@@ -63,7 +64,7 @@ const Menu = ({ history }) => (
                             style={isActive(history, `/post/create`)}
                             className="nav-link"
                         >
-                            Create Post
+                            <Icon.PlusCircle/>
                         </Link>
                     </li>
 
@@ -76,7 +77,7 @@ const Menu = ({ history }) => (
                             )}
                             className="nav-link"
                         >
-                            {`${isAuthenticated().user.name}'s profile`}
+                         <Icon.User />
                         </Link>
                     </li>
 

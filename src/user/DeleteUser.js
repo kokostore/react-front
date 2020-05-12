@@ -17,7 +17,7 @@ class DeleteUser extends Component {
                 console.log(data.error);
             } else {
                 // signout user
-                signout(() => console.log("User is deleted"));
+                signout(() => console.log("User & its posts are deleted"));
                 // redirect
                 this.setState({ redirect: true });
             }

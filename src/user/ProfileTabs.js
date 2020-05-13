@@ -16,9 +16,11 @@ class ProfileTabs extends Component {
 
     render() {
         const {posts} = this.props;
+        const length = posts.length;
+
         let userPost;
         if(!this.state.loading)
-            {if(this.props.posts.length)
+            {if(length)
             userPost=(
                 <div  className="row">
                 {posts.map((post, i) => (

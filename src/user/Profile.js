@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useLayoutEffect } from "react";
 import { isAuthenticated } from "../auth";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
@@ -15,7 +15,8 @@ class Profile extends Component {
             redirectToSignin: false,
 
             error: "",
-            posts: []
+            posts: [],
+            loadingPosts:true,
         };
     }
 
@@ -60,13 +61,14 @@ class Profile extends Component {
         listByUser(userId, token).then(data => {
             if (data.error) {
                 console.log(data.error);
-            } else {
-                this.setState({ posts: data });
+            } 
+            else {
+                this.setState({ posts: data,loadingPosts:false });
             }
-        });
+        })
     };
 
-    componentDidMount() {
+    componentDidMount(){
         const userId = this.props.match.params.userId;
         this.init(userId);
     }
@@ -77,7 +79,7 @@ class Profile extends Component {
     }
 
     render() {
-        const { redirectToSignin, user, posts } = this.state;
+        const { redirectToSignin, user, posts,loadingPosts } = this.state;
         if (redirectToSignin) return <Redirect to="/signin" />;
 
         const photoUrl = user._id
@@ -139,6 +141,7 @@ class Profile extends Component {
                         <hr />
                         <ProfileTabs 
                         posts={posts}
+                        loadingPosts={loadingPosts}
                         />
                     </div>
                 </div>

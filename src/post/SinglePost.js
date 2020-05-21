@@ -28,7 +28,7 @@ class SinglePost extends Component {
             if(data.error) {
                 console.log(data.error);
             } else {
-                this.setState({redirectToHome: true});
+                this.redirectBackHandler()
             }
         });
     };
@@ -41,6 +41,14 @@ class SinglePost extends Component {
             this.deletePost();
         }
     };
+
+    redirectBackHandler=()=>{
+        console.log(this.props.history.length)
+        if(this.props.history.length>1)
+            this.props.history.goBack()
+        else
+            this.setState({redirectToHome:true})
+    }
 
     renderPost = post => {
         const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
@@ -69,7 +77,7 @@ class SinglePost extends Component {
                     on {new Date(post.created).toDateString()}
                 </p>
                 <div className="d-inline-block">
-                    <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
+                    <Link onClick={this.redirectBackHandler} className="btn btn-raised btn-primary btn-sm mr-5">
                         Back to posts
                     </Link>
                     {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id && 

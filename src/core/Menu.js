@@ -28,7 +28,7 @@ const Menu = ({ history }) => (
                     style={isActive(history, "/users")}
                     to="/users"
                 >
-                    Users
+                    Stores
                 </Link>
             </li>
 

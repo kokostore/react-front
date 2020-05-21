@@ -40,7 +40,7 @@ class Users extends Component {
                             to={`/user/${user._id}`}
                             className="btn btn-raised btn-primary btn-sm"
                         >
-                            View Profile
+                            View Store
                         </Link>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ class Users extends Component {
         const { users } = this.state;
         return (
             <div className="container">
-                <h2 className="mt-5 mb-5">Users</h2>
+                <h2 className="mt-5 mb-5">Stores</h2>
 
                 {this.renderUsers(users)}
             </div>

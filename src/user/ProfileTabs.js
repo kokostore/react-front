@@ -20,19 +20,19 @@ class ProfileTabs extends Component {
             );
             else{
             userPosts=( <div className="jumbotron text-center" style={{fontSize:'2em'}}>
-                            You haven't posted anything yet...
+                            No items yet...
                         </div>)
             }
         }
         else{
             userPosts=( <div className="jumbotron text-center" style={{fontSize:'2em'}}>
-                            Loading ur posts...
+                            Loading items...
                         </div>)
         }
         return (
                 <div>
                     <div className="col-md-12" >
-                        <h3 className="text-primary">Posts</h3>
+                        <h3 className="text-primary">Items</h3>
                         <hr/>
                         {userPosts}
                     </div>

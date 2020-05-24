@@ -1,0 +1,51 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: React Github CI
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install and test
+      run: |
+        npm install
+        #npm test
+      env:
+        CI: true
+
+  deploy:
+          #needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH and deploy node app
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.test_HOST }}
+        username: ${{ secrets.test_USERNAME }}
+        password: ${{ secrets.test_PASSWORD }}
+        script: |
+          cd ~/react-front
+          git checkout master
+          git pull origin master
+          npm install --production
+          pm2 restart npm -- start
+
+

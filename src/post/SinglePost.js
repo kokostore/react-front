@@ -43,7 +43,6 @@ class SinglePost extends Component {
     };
 
     redirectBackHandler=()=>{
-        console.log(this.props.history.length)
         if(this.props.history.length>1)
             this.props.history.goBack()
         else
@@ -53,23 +52,88 @@ class SinglePost extends Component {
     renderPost = post => {
         const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
         const posterName = post.postedBy ? post.postedBy.name : " Unknown";
-
+        let postImgs=[]
+        let indicators=[]
+        for(let i=1;i<post.photos.length;i++){
+            postImgs.push(
+                <div className="carousel-item">
+                <img className="d-block w-100"
+                        src={`${
+                        post.photos[i]
+                        }`}
+                        alt={post.title}
+                        onError={i => (i.target.src = `${DefaultPost}`)}
+                        style={{
+                            height: "300px",
+                            width: "100%",
+                        }}
+                    />
+            </div>)
+            indicators.push(
+                <li data-target="#carouselExampleIndicators" 
+                    data-slide-to={i} 
+                    style={{
+                        cursor:'pointer',
+                        height: "50px",
+                        width: "40px",
+                        background:`url(${post.photos[i]})`,
+                        backgroundRepeat:'no-repeat',
+                        backgroundPosition:'center',
+                        backgroundSize:'35px 45px',
+                        backgroundColor:'rgba(255,255,255,0.5)'
+                        }}>
+                </li>
+            )
+        }
+        let carousal=(
+            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+                <ol className="carousel-indicators" style={{}}>
+                    <li data-target="#carouselExampleIndicators" 
+                        data-slide-to="0" 
+                        className="active" 
+                        style={{
+                            cursor:'pointer',
+                            height: "50px",
+                            width: "40px",
+                            background:`url(${post.photos[0]})`,
+                            backgroundRepeat:'no-repeat',
+                            backgroundPosition:'center',
+                            backgroundSize:'35px 45px',
+                            backgroundColor:'rgba(255,255,255,0.5)'
+                            }}>
+                    </li>
+                    {indicators}
+                </ol>
+                    <div className="carousel-inner">
+                        <div className="carousel-item active">
+                        <img className="d-block w-100"
+                                src={`${
+                                 post.photos[0]
+                                }`}
+                                alt={post.title}
+                                onError={i => (i.target.src = `${DefaultPost}`)}
+                                style={{
+                                    height: "300px",
+                                    width: "100%",
+                                }}
+                            />
+                        </div>
+                    {postImgs} 
+                </div>
+                <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style={{backgroundColor:'rgba(0,0,0,0.2)'}}>
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+                </a>
+                <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" style={{backgroundColor:'rgba(0,0,0,0.2)'}}>
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Next</span>
+                </a>
+            </div>
+        )
+        
         return (
             <div className="card-body">
-                <img
-                    src={`${process.env.REACT_APP_API_URL}/post/photo/${
-                        post._id
-                    }`}
-                    alt={post.title}
-                    onError={i => (i.target.src = `${DefaultPost}`)}
-                    className="img-thumbnail mb-3"
-                    style={{
-                        height: "300px",
-                        width: "100%",
-                        objectFit: "cover"
-                    }}
-                />
-
+                {carousal}
                 <p className="card-text">{post.body}</p>
                 <br />
                 <p className="font-italic mark">

@@ -9,10 +9,10 @@ class NewPost extends Component {
         this.state = {
             title: "",
             body: "",
-            photo: "",
+            photos: [],
             error: "",
             user: {},
-            fileSize: 0,
+            fileSize: [],
             loading: false,
             redirectToProfile: false
         };
@@ -25,13 +25,15 @@ class NewPost extends Component {
 
     isValid = () => {
         const { title, body, fileSize } = this.state;
-        if (fileSize > 100000) {
-            this.setState({
-                error: "File size should be less than 100kb",
-                loading: false
-            });
-            return false;
-      }
+        for(let file in fileSize){
+            if (fileSize[file] > 100000){
+                this.setState({
+                    error: "Each file size should be less than 100kb",
+                    loading: false
+                });
+                return false;
+            }
+        }
         if (title.length === 0) {
             this.setState({ error: "Title is required" , loading: false});
             return false;
@@ -45,12 +47,23 @@ class NewPost extends Component {
 
     handleChange = name => event => {
         this.setState({ error: "" });
-        const value =
-            name === "photo" ? event.target.files[0] : event.target.value;
-
-        const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value);
-        this.setState({ [name]: value, fileSize });
+        let value; 
+        if(name === "photos"){
+            let pics=[],sizes=[];
+            value=event.target.files;
+            pics[0]=value;
+            this.postData.delete('photos');
+            for(let file=0; file<event.target.files.length;file++){
+                    sizes.push(event.target.files[file].size)
+                    this.postData.append('photos', event.target.files[file]);
+                }
+            this.setState({photos:pics,fileSize:sizes})
+        }
+        else{
+            value=event.target.value;
+            this.setState({ [name]: value });
+            this.postData.set(name, value);
+        }
     };
 
     clickSubmit = event => {
@@ -78,13 +91,14 @@ class NewPost extends Component {
     newPostForm = (title, body) => (
         <form>
             <div className="form-group">
-                <label className="text-muted">Post Photo</label>
-                <input
-                    onChange={this.handleChange("photo")}
+                <label className="text-muted">Post Photos</label>
+                    <input
+                    onChange={this.handleChange("photos")}
                     type="file"
                     accept="image/*"
-                    className="form-control"
-                />
+                    multiple
+                    className="form-control" 
+                    />
             </div>
             <div className="form-group">
                 <label className="text-muted">Title</label>
@@ -119,7 +133,6 @@ class NewPost extends Component {
         const {
             title,
             body,
-            photo,
             user,
             error,
             loading,
@@ -147,7 +160,6 @@ class NewPost extends Component {
                 ) : (
                     ""
                 )}
-
                 {this.newPostForm(title, body)}
             </div>
         );

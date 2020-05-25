@@ -24,12 +24,14 @@ class Posts extends Component {
     }
 
     renderPosts = posts => {
+        console.log(posts);
         return (
             <LazyLoad>
                 <div className="row">
                     {posts.map((post, i) => {
+                        console.log(post);
                         return (
-                            <PostCard post={post} i={i} />
+                            <PostCard post={post} i={i}  showAddToCartButton={true} cartUpdate={false} showRemoveProductButton={false}/>
                             );
                         })}
                 </div>

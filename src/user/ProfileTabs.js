@@ -16,7 +16,7 @@ class ProfileTabs extends Component {
                     <div className="row">
                         {posts.map((post, i) => {
                             return (
-                                <PostCard post={post} i={i} />
+                                <PostCard post={post} i={i} showAddToCartButton={true} cartUpdate={false} showRemoveProductButton={false}/>
                                 );
                             })}
                     </div>

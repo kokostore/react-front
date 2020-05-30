@@ -56,17 +56,15 @@ class SinglePost extends Component {
         let indicators=[]
         for(let i=1;i<post.photos.length;i++){
             postImgs.push(
-                <div className="carousel-item">
+                <div className="carousel-item" key={i} 
+                     style={{width:'450px',height: "500px"}}>
                 <img className="d-block w-100"
                         src={`${
                         post.photos[i]
                         }`}
                         alt={post.title}
                         onError={i => (i.target.src = `${DefaultPost}`)}
-                        style={{
-                            height: "300px",
-                            width: "100%",
-                        }}
+                        style={{height: "500px"}}
                     />
             </div>)
             indicators.push(
@@ -75,18 +73,19 @@ class SinglePost extends Component {
                     style={{
                         cursor:'pointer',
                         height: "50px",
-                        width: "40px",
+                        width: "50px",
                         background:`url(${post.photos[i]})`,
                         backgroundRepeat:'no-repeat',
                         backgroundPosition:'center',
-                        backgroundSize:'35px 45px',
+                        backgroundSize:'45px 45px',
                         backgroundColor:'rgba(255,255,255,0.5)'
                         }}>
                 </li>
             )
         }
         let carousal=(
-            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel"
+                style={{width:'450px',height: "500px",margin:'auto'}}>
                 <ol className="carousel-indicators" style={{}}>
                     <li data-target="#carouselExampleIndicators" 
                         data-slide-to="0" 
@@ -94,33 +93,33 @@ class SinglePost extends Component {
                         style={{
                             cursor:'pointer',
                             height: "50px",
-                            width: "40px",
+                            width: "50px",
                             background:`url(${post.photos[0]})`,
                             backgroundRepeat:'no-repeat',
                             backgroundPosition:'center',
-                            backgroundSize:'35px 45px',
+                            backgroundSize:'45px 45px',
                             backgroundColor:'rgba(255,255,255,0.5)'
                             }}>
                     </li>
                     {indicators}
                 </ol>
-                    <div className="carousel-inner">
-                        <div className="carousel-item active">
+                    <div className="carousel-inner" style={{
+                        }}>
+                        <div className="carousel-item active" style={{
+                        }}>
                         <img className="d-block w-100"
                                 src={`${
                                  post.photos[0]
                                 }`}
                                 alt={post.title}
                                 onError={i => (i.target.src = `${DefaultPost}`)}
-                                style={{
-                                    height: "300px",
-                                    width: "100%",
-                                }}
+                                style={{height: "500px"}}
                             />
                         </div>
                     {postImgs} 
                 </div>
-                <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style={{backgroundColor:'rgba(0,0,0,0.2)'}}>
+                <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style={{backgroundColor:'rgba(0,0,0,0.2)',
+                        }}>
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="sr-only">Previous</span>
                 </a>
@@ -146,7 +145,7 @@ class SinglePost extends Component {
                     </Link>
                     {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id && 
                     <>
-                    <Link to={`/post/edit/${post._id}`} className="btn btn-raised btn-warning btn-sm mr-5">
+                    <Link post={post} to={`/post/edit/${post._id}`} className="btn btn-raised btn-warning btn-sm mr-5">
                         Update Post
                     </Link>
 
@@ -167,8 +166,7 @@ class SinglePost extends Component {
         const { post } = this.state;
         return (
             <div className="container">
-                <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
-
+                <h2 className="display-2 mt-5 mb-5" >{post.title}</h2>
                 {!post ? (
                     <div className="jumbotron text-center">
                         <h2>Loading...</h2>

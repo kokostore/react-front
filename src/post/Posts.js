@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
 import PostCard from './PostCard'
+import LazyLoad from 'react-lazyload';
 
 class Posts extends Component {
     constructor() {
@@ -22,13 +23,15 @@ class Posts extends Component {
 
     renderPosts = posts => {
         return (
-            <div className="row">
-                {posts.map((post, i) => {
-                    return (
-                        <PostCard post={post} i={i} />
-                    );
-                })}
-            </div>
+            <LazyLoad>
+                <div className="row">
+                    {posts.map((post, i) => {
+                        return (
+                            <PostCard post={post} i={i} />
+                            );
+                        })}
+                </div>
+            </LazyLoad>
         );
     };
 
@@ -39,7 +42,7 @@ class Posts extends Component {
                 <h2 className="mt-5 mb-5">
                     {!posts.length ? "Loading..." : "Recent Items"}
                 </h2>
-
+                
                 {this.renderPosts(posts)}
             </div>
         );

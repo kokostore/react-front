@@ -24,7 +24,6 @@ export const list = () => {
 };
 
 export const singlePost = postId => {
-    console.log("i am here");
     return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
         method: "GET"
     })

@@ -12,9 +12,11 @@ class EditPost extends Component {
             title: "",
             body: "",
             redirectToProfile: false,
+            photos: [],
             error: "",
-            fileSize: 0,
-            loading: false
+            loading: false,
+            fileSize: [],
+            user: {},
         };
     }
 
@@ -27,7 +29,8 @@ class EditPost extends Component {
                     id: data._id,
                     title: data.title,
                     body: data.body,
-                    error: ""
+                    error: "",
+                    photos:data.photos
                 });
             }
         });
@@ -40,14 +43,20 @@ class EditPost extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize } = this.state;
-        if (fileSize > 1000000) {
-            this.setState({
-                error: "File size should be less than 100kb",
-                loading: false
-            });
+        const { title, body, fileSize, photos } = this.state;
+        if(photos.length>10){
+            this.setState({ error: "Max 10 images can be uploaded in a post. Please select fewer files." , loading: false});
             return false;
-      }
+        }
+        for(let file in fileSize){
+            if (fileSize[file] > 100000){
+                this.setState({
+                    error: "Each file size should be less than 100kb",
+                    loading: false
+                });
+                return false;
+            }
+        }
         if (title.length === 0) {
             this.setState({ error: "Title is required" , loading: false});
             return false;
@@ -61,12 +70,24 @@ class EditPost extends Component {
 
     handleChange = name => event => {
         this.setState({ error: "" });
-        const value =
-            name === "photo" ? event.target.files[0] : event.target.value;
-
-        const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value);
-        this.setState({ [name]: value, fileSize });
+        let value; 
+        if(name === "photos"){
+            if(event.target.files.length){
+                let sizes=[],showSelected=[];
+                this.postData.delete('photos');
+                for(let file=0; file<event.target.files.length;file++){
+                        sizes.push(event.target.files[file].size)
+                        this.postData.append('photos', event.target.files[file]);
+                        showSelected[file]=URL.createObjectURL(event.target.files[file]);
+                    }
+                this.setState({photos:showSelected,fileSize:sizes})
+            }
+        }
+        else{
+            value=event.target.value;
+            this.setState({ [name]: value });
+            this.postData.set(name, value);
+        }
     };
 
     clickSubmit = event => {
@@ -96,9 +117,10 @@ class EditPost extends Component {
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>
                 <input
-                    onChange={this.handleChange("photo")}
+                    onChange={this.handleChange("photos")}
                     type="file"
                     accept="image/*"
+                    multiple
                     className="form-control"
                 />
             </div>
@@ -133,7 +155,6 @@ class EditPost extends Component {
 
     render() {
         const {
-            id,
             title,
             body,
             redirectToProfile,
@@ -143,6 +164,22 @@ class EditPost extends Component {
 
         if (redirectToProfile) {
             return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
+        }
+
+        let displayImgs=[]
+        for(let i=0;i<this.state.photos.length;i++){
+            displayImgs.push(
+                <img
+                    style={{ height: "200px", width: "auto" }}
+                    className="img-thumbnail"
+                    src={`${
+                        this.state.photos[i]
+                    }`}
+                    onError={i => (i.target.src = `${DefaultPost}`)}
+                    alt={title+' image '+i}
+                    key={i}
+                />
+            )
         }
 
         return (
@@ -164,15 +201,7 @@ class EditPost extends Component {
                     ""
                 )}
 
-                <img
-                    style={{ height: "200px", width: "auto" }}
-                    className="img-thumbnail"
-                    src={`${
-                        process.env.REACT_APP_API_URL
-                    }/post/photo/${id}?${new Date().getTime()}`}
-                    onError={i => (i.target.src = `${DefaultPost}`)}
-                    alt={title}
-                />
+                {displayImgs}
 
                 {this.editPostForm(title, body)}
             </div>

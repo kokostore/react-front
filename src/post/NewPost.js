@@ -24,7 +24,11 @@ class NewPost extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize } = this.state;
+        const { title, body, fileSize, photos } = this.state;
+        if(photos.length>10){
+            this.setState({ error: "Max 10 images can be uploaded in a post. Please select fewer files." , loading: false});
+            return false;
+        }
         for(let file in fileSize){
             if (fileSize[file] > 100000){
                 this.setState({
@@ -49,15 +53,14 @@ class NewPost extends Component {
         this.setState({ error: "" });
         let value; 
         if(name === "photos"){
-            let pics=[],sizes=[];
-            value=event.target.files;
-            pics[0]=value;
+            let sizes=[],showSelected=[];
             this.postData.delete('photos');
             for(let file=0; file<event.target.files.length;file++){
                     sizes.push(event.target.files[file].size)
                     this.postData.append('photos', event.target.files[file]);
+                    showSelected[file]=URL.createObjectURL(event.target.files[file]);
                 }
-            this.setState({photos:pics,fileSize:sizes})
+            this.setState({photos:showSelected,fileSize:sizes})
         }
         else{
             value=event.target.value;
@@ -143,6 +146,21 @@ class NewPost extends Component {
             return <Redirect to={`/user/${user._id}`} />;
         }
 
+        let displayImgs=[]
+        for(let i=0;i<this.state.photos.length;i++){
+            displayImgs.push(
+                <img
+                    style={{ height: "200px", width: "auto" }}
+                    className="img-thumbnail"
+                    src={`${
+                        this.state.photos[i]
+                    }`}
+                    alt={title+' image '+i}
+                    key={i}
+                />
+            )
+        }
+
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Create a new post</h2>
@@ -160,6 +178,7 @@ class NewPost extends Component {
                 ) : (
                     ""
                 )}
+                {displayImgs}
                 {this.newPostForm(title, body)}
             </div>
         );

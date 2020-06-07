@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
+import { PageLoader } from "../styles/Loader";
 
 class NewPost extends Component {
     constructor() {
@@ -58,7 +59,7 @@ class NewPost extends Component {
             for(let file=0; file<event.target.files.length;file++){
                     sizes.push(event.target.files[file].size)
                     this.postData.append('photos', event.target.files[file]);
-                    showSelected[file]=URL.createObjectURL(event.target.files[file]);
+                    showSelected[file]={link:URL.createObjectURL(event.target.files[file])};
                 }
             this.setState({photos:showSelected,fileSize:sizes})
         }
@@ -147,13 +148,13 @@ class NewPost extends Component {
         }
 
         let displayImgs=[]
-        for(let i=0;i<this.state.photos.length;i++){
+        for(let i in this.state.photos){
             displayImgs.push(
                 <img
                     style={{ height: "200px", width: "auto" }}
                     className="img-thumbnail"
                     src={`${
-                        this.state.photos[i]
+                        this.state.photos[i].link
                     }`}
                     alt={title+' image '+i}
                     key={i}
@@ -171,13 +172,7 @@ class NewPost extends Component {
                     {error}
                 </div>
 
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )}
+                {loading ? (<PageLoader loading={this.state.loading}/>) : null}
                 {displayImgs}
                 {this.newPostForm(title, body)}
             </div>

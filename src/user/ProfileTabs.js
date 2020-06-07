@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PostCard from '../post/PostCard'
 import LazyLoad from 'react-lazyload';
+import { ComponentLoader } from "../styles/Loader";
 
 class ProfileTabs extends Component {
     
@@ -28,9 +29,7 @@ class ProfileTabs extends Component {
             }
         }
         else{
-            userPosts=( <div className="jumbotron text-center" style={{fontSize:'2em'}}>
-                            Loading items...
-                        </div>)
+            userPosts=( <ComponentLoader loading={true}/>)
         }
         return (
                 <div>

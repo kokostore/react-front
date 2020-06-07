@@ -3,6 +3,7 @@ import { singlePost, update } from "./apiPost";
 import { isAuthenticated } from "../auth";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/mountains.jpg";
+import { LoaderWithBackDrop } from "../styles/Loader";
 
 class EditPost extends Component {
     constructor() {
@@ -78,7 +79,7 @@ class EditPost extends Component {
                 for(let file=0; file<event.target.files.length;file++){
                         sizes.push(event.target.files[file].size)
                         this.postData.append('photos', event.target.files[file]);
-                        showSelected[file]=URL.createObjectURL(event.target.files[file]);
+                        showSelected[file]={link:URL.createObjectURL(event.target.files[file])};
                     }
                 this.setState({photos:showSelected,fileSize:sizes})
             }
@@ -105,6 +106,8 @@ class EditPost extends Component {
                         loading: false,
                         title: "",
                         body: "",
+                        photos:[],
+                        fileSize:[],
                         redirectToProfile: true
                     });
                 }
@@ -167,13 +170,14 @@ class EditPost extends Component {
         }
 
         let displayImgs=[]
+        if(this.state.photos.length)
         for(let i=0;i<this.state.photos.length;i++){
             displayImgs.push(
                 <img
                     style={{ height: "200px", width: "auto" }}
                     className="img-thumbnail"
-                    src={`${
-                        this.state.photos[i]
+                    src={`${this.state.photos.length?
+                        this.state.photos[i].link:`${DefaultPost}`
                     }`}
                     onError={i => (i.target.src = `${DefaultPost}`)}
                     alt={title+' image '+i}
@@ -181,7 +185,6 @@ class EditPost extends Component {
                 />
             )
         }
-
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">{title}</h2>
@@ -193,13 +196,7 @@ class EditPost extends Component {
                     {error}
                 </div>
 
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )}
+                {loading ? (<LoaderWithBackDrop loading={this.state.loading} />) : null}
 
                 {displayImgs}
 

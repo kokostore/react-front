@@ -15,9 +15,7 @@ const PostCard=(props)=>{
         <div className="card col-md-4" key={i}>
             <div className="card-body">
                 <img
-                    src={`${
-                        process.env.REACT_APP_API_URL
-                    }/post/photo/${post._id}`}
+                    src={post.photos.length?`${post.photos[0].link}`:`${DefaultPost}`}
                     alt={post.title}
                     onError={i =>
                     (i.target.src = `${DefaultPost}`)

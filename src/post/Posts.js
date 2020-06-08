@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
 import PostCard from './PostCard'
+import LazyLoad from 'react-lazyload';
+import {PageLoader} from "../styles/Loader";
 
 class Posts extends Component {
     constructor() {
@@ -15,6 +17,7 @@ class Posts extends Component {
             if (data.error) {
                 console.log(data.error);
             } else {
+                console.log(data)
                 this.setState({ posts: data });
             }
         });
@@ -22,13 +25,15 @@ class Posts extends Component {
 
     renderPosts = posts => {
         return (
-            <div className="row">
-                {posts.map((post, i) => {
-                    return (
-                        <PostCard post={post} i={i} />
-                    );
-                })}
-            </div>
+            <LazyLoad>
+                <div className="row">
+                    {posts.map((post, i) => {
+                        return (
+                            <PostCard post={post} i={i} />
+                            );
+                        })}
+                </div>
+            </LazyLoad>
         );
     };
 
@@ -37,9 +42,10 @@ class Posts extends Component {
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">
-                    {!posts.length ? "Loading..." : "Recent Items"}
+                    {!posts.length ?<PageLoader loading={this.state.loading}/>
+                                    : "Recent Items"}
                 </h2>
-
+                
                 {this.renderPosts(posts)}
             </div>
         );

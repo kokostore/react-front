@@ -3,6 +3,7 @@ import { singlePost, remove } from "./apiPost";
 import DefaultPost from "../images/mountains.jpg";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth";
+import { PageLoader } from "../styles/Loader";
 
 class SinglePost extends Component {
     state = {
@@ -43,7 +44,6 @@ class SinglePost extends Component {
     };
 
     redirectBackHandler=()=>{
-        console.log(this.props.history.length)
         if(this.props.history.length>1)
             this.props.history.goBack()
         else
@@ -53,23 +53,85 @@ class SinglePost extends Component {
     renderPost = post => {
         const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
         const posterName = post.postedBy ? post.postedBy.name : " Unknown";
-
+        let postImgs=[]
+        let indicators=[]
+        for(let i=1;i<post.photos.length;i++){
+            postImgs.push(
+                <div className="carousel-item" key={i}
+                     style={{width:'450px',height: "500px", backgroundColor:'rgba(0,0,0,0.3)'}}>
+                <img className="d-block w-100"
+                        src={`${post.photos.length?
+                        post.photos[i].link:`${DefaultPost}`
+                        }`}
+                        alt={post.title}
+                        onError={i => (i.target.src = `${DefaultPost}`)}
+                        style={{height: "500px"}}
+                    />
+            </div>)
+            indicators.push(
+                <li data-target="#carouselExampleIndicators" 
+                    data-slide-to={i} 
+                    style={{
+                        cursor:'pointer',
+                        height: "50px",
+                        width: "50px",
+                        background:`url(${post.photos.length?post.photos[i].link:DefaultPost})`,
+                        backgroundRepeat:'no-repeat',
+                        backgroundPosition:'center',
+                        backgroundSize:'45px 45px',
+                        backgroundColor:'rgba(255,255,255,0.5)'
+                        }}>
+                </li>
+            )
+        }
+        let carousal=(
+            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-touch="true" 
+                style={{width:'450px',height: "500px",margin:'auto'}}>
+                <ol className="carousel-indicators" >
+                    <li data-target="#carouselExampleIndicators" 
+                        data-slide-to="0" 
+                        className="active" 
+                        style={{
+                            cursor:'pointer',
+                            height: "50px",
+                            width: "50px",
+                            background:`url(${post.photos.length?post.photos[0].link:DefaultPost})`,
+                            backgroundRepeat:'no-repeat',
+                            backgroundPosition:'center',
+                            backgroundSize:'45px 45px',
+                            backgroundColor:'rgba(255,255,255,0.5)'
+                            }}>
+                    </li>
+                    {indicators}
+                </ol>
+                    <div className="carousel-inner" style={{
+                        }}>
+                        <div className="carousel-item active" style={{backgroundColor:'rgba(0,0,0,0.3)'}}>
+                        <img className="d-block w-100"
+                                src={`${post.photos.length?
+                                 post.photos[0].link:`${DefaultPost}`
+                                }`}
+                                alt={post.title}
+                                onError={i => (i.target.src = `${DefaultPost}`)}
+                                style={{height: "500px"}}
+                            />
+                        </div>
+                    {postImgs} 
+                </div>
+                <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+                </a>
+                <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Next</span>
+                </a>
+            </div>
+        )
+        
         return (
             <div className="card-body">
-                <img
-                    src={`${process.env.REACT_APP_API_URL}/post/photo/${
-                        post._id
-                    }`}
-                    alt={post.title}
-                    onError={i => (i.target.src = `${DefaultPost}`)}
-                    className="img-thumbnail mb-3"
-                    style={{
-                        height: "300px",
-                        width: "100%",
-                        objectFit: "cover"
-                    }}
-                />
-
+                {carousal}
                 <p className="card-text">{post.body}</p>
                 <br />
                 <p className="font-italic mark">
@@ -82,7 +144,7 @@ class SinglePost extends Component {
                     </Link>
                     {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id && 
                     <>
-                    <Link to={`/post/edit/${post._id}`} className="btn btn-raised btn-warning btn-sm mr-5">
+                    <Link post={post} to={`/post/edit/${post._id}`} className="btn btn-raised btn-warning btn-sm mr-5">
                         Update Post
                     </Link>
 
@@ -95,7 +157,7 @@ class SinglePost extends Component {
             </div>
         );
     };
-
+    
     render() {
         if (this.state.redirectToHome) {
             return <Redirect to={`/`} />;
@@ -103,15 +165,8 @@ class SinglePost extends Component {
         const { post } = this.state;
         return (
             <div className="container">
-                <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
-
-                {!post ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    this.renderPost(post)
-                )}
+                <h2 className="display-2 mt-5 mb-5" >{post.title}</h2>
+                {!post ? (<PageLoader loading={this.state.loading}/>) : (this.renderPost(post))}
             </div>
         );
     }

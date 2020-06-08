@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { signin, authenticate } from "../auth";
+import { LoaderWithBackDrop } from "../styles/Loader";
 
 class Signin extends Component {
     constructor() {
@@ -94,12 +95,9 @@ class Signin extends Component {
                 </div>
 
                 {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )}
+                    <LoaderWithBackDrop loading={this.state.loading}/>
+                ) : null
+                }
 
                 {this.signinForm(email, password)}
             </div>

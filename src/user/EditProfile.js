@@ -3,6 +3,7 @@ import { isAuthenticated } from "../auth";
 import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpg";
+import { LoaderWithBackDrop } from "../styles/Loader";
 
 class EditProfile extends Component {
     constructor() {
@@ -184,12 +185,9 @@ class EditProfile extends Component {
                 </div>
 
                 {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )}
+                    <LoaderWithBackDrop loading={this.state.loading}/>
+                ) : null
+                }
 
                 <img 
                 style={{height: "200px", width:"auto"}}

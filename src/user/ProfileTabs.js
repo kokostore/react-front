@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PostCard from '../post/PostCard'
+import LazyLoad from 'react-lazyload';
+import { ComponentLoader } from "../styles/Loader";
 
 class ProfileTabs extends Component {
     
@@ -10,13 +12,15 @@ class ProfileTabs extends Component {
         if(!loadingPosts){          //first check loading status
             if(posts.length)        //then check if user has any posts
             userPosts=( 
-                <div className="row">
-                    {posts.map((post, i) => {
-                        return (
-                            <PostCard post={post} i={i} />
-                        );
-                    })}
-                </div>
+                <LazyLoad>
+                    <div className="row">
+                        {posts.map((post, i) => {
+                            return (
+                                <PostCard post={post} i={i} />
+                                );
+                            })}
+                    </div>
+                </LazyLoad>
             );
             else{
             userPosts=( <div className="jumbotron text-center" style={{fontSize:'2em'}}>
@@ -25,9 +29,7 @@ class ProfileTabs extends Component {
             }
         }
         else{
-            userPosts=( <div className="jumbotron text-center" style={{fontSize:'2em'}}>
-                            Loading items...
-                        </div>)
+            userPosts=( <ComponentLoader loading={true}/>)
         }
         return (
                 <div>

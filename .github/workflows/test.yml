@@ -43,8 +43,8 @@ jobs:
         password: ${{ secrets.test_PASSWORD }}
         script: |
           cd ~/react-front
-          git checkout master
-          git pull origin master
+          git checkout test
+          git pull origin test
           npm install --production
           pm2 restart npm -- start
 

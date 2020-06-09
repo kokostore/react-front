@@ -148,10 +148,11 @@ class EditPost extends Component {
             modifyNewImgs[delIndex-this.state.numbExistingPics]=null    
             this.setState({newImgs:modifyNewImgs}) 
         }
+
         //remove img to be deleted from display 
         event.target.parentNode.remove()
     }
-    editPostForm = (title, body, price) => (
+    editPostForm = (title, body) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>
@@ -189,7 +190,7 @@ class EditPost extends Component {
                     onChange={this.handleChange("price")}
                     type="number"
                     className="form-control"
-                    value={price}
+                    value={this.state.price}
                 />
             </div>
 

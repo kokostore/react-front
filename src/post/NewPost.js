@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-import { PageLoader } from "../styles/Loader";
+import { LoaderWithBackDrop } from "../styles/Loader";
 
 class NewPost extends Component {
     constructor() {
@@ -172,7 +172,7 @@ class NewPost extends Component {
                     {error}
                 </div>
 
-                {loading ? (<PageLoader loading={this.state.loading}/>) : null}
+                {loading ? (<LoaderWithBackDrop loading={this.state.loading}/>) : null}
                 {displayImgs}
                 {this.newPostForm(title, body)}
             </div>

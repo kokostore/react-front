@@ -36,8 +36,8 @@ class EditPost extends Component {
                     body: data.body,
                     error: "",
                     photos:data.photos,
-                    numbExistingPics:data.photos.length
-                    price: data.price,
+                    numbExistingPics:data.photos.length,
+                    price: data.price
                 });
             }
         });
@@ -122,12 +122,9 @@ class EditPost extends Component {
                         loading: false,
                         title: "",
                         body: "",
-<<<<<<< HEAD
                         photos:[],
                         fileSize:[],
-=======
                         price: 0,
->>>>>>> add to cartcart and price
                         redirectToProfile: true
                     });
                 }
@@ -151,15 +148,10 @@ class EditPost extends Component {
             modifyNewImgs[delIndex-this.state.numbExistingPics]=null    
             this.setState({newImgs:modifyNewImgs}) 
         }
-
-<<<<<<< HEAD
         //remove img to be deleted from display 
         event.target.parentNode.remove()
     }
-    editPostForm = (title, body) => (
-=======
     editPostForm = (title, body, price) => (
->>>>>>> add to cartcart and price
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>

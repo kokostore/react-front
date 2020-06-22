@@ -151,11 +151,7 @@ class NewPost extends Component {
         const {
             title,
             body,
-<<<<<<< HEAD
-=======
             price,
-            photo,
->>>>>>> add to cartcart and price
             user,
             error,
             loading,
@@ -190,22 +186,9 @@ class NewPost extends Component {
                 >
                     {error}
                 </div>
-
-<<<<<<< HEAD
                 {loading ? (<LoaderWithBackDrop loading={this.state.loading}/>) : null}
                 {displayImgs}
-                {this.newPostForm(title, body)}
-=======
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )}
-
                 {this.newPostForm(title, body, price)}
->>>>>>> add to cartcart and price
             </div>
         );
     }

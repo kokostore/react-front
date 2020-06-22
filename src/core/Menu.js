@@ -3,6 +3,7 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth";
 import * as Icon from 'react-feather';
+import  {itemTotal} from "../order/cartHelpers";
 
 const isActive = (history, path) => {
     if (history.location.pathname === path) return { color: "#ff9900" };
@@ -29,6 +30,16 @@ const Menu = ({ history }) => (
                     to="/users"
                 >
                     Stores
+                </Link>
+            </li>
+
+            <li className="nav-item">
+                <Link
+                    className="nav-link"
+                    style={isActive(history, "/cart")}
+                    to="/cart"
+                >
+                    <Icon.ShoppingBag /> <sup><small className="cart-badge">{itemTotal()}</small></sup>
                 </Link>
             </li>
 

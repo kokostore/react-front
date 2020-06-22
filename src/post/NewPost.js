@@ -11,6 +11,7 @@ class NewPost extends Component {
             title: "",
             body: "",
             photos: [],
+            price: "",
             error: "",
             user: {},
             fileSize: [],
@@ -25,7 +26,7 @@ class NewPost extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize, photos } = this.state;
+        const { title, body, price, fileSize, photos } = this.state;
         if(photos.length>10){
             this.setState({ error: "Max 10 images can be uploaded in a post. Please select fewer files." , loading: false});
             return false;
@@ -45,6 +46,10 @@ class NewPost extends Component {
         }
         if (body.length === 0) {
             this.setState({ error: "Body is required", loading: false });
+            return false;
+        }
+        if (price < 0) {
+            this.setState({ error: "Price should be greater than zero", loading: false });
             return false;
         }
         return true;
@@ -85,6 +90,7 @@ class NewPost extends Component {
                         loading: false,
                         title: "",
                         body: "",
+                        price: "",
                         redirectToProfile: true
                     });
                 }
@@ -92,7 +98,7 @@ class NewPost extends Component {
         }
     };
 
-    newPostForm = (title, body) => (
+    newPostForm = (title, body, price) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photos</label>
@@ -113,7 +119,15 @@ class NewPost extends Component {
                     value={title}
                 />
             </div>
-
+            <div className="form-group">
+                <label className="text-muted">Price</label>
+                <input 
+                    onChange={this.handleChange("price")} 
+                    type="number"
+                    className="form-control"
+                    value={price} 
+                />
+            </div>
             <div className="form-group">
                 <label className="text-muted">Body</label>
                 <textarea
@@ -137,6 +151,11 @@ class NewPost extends Component {
         const {
             title,
             body,
+<<<<<<< HEAD
+=======
+            price,
+            photo,
+>>>>>>> add to cartcart and price
             user,
             error,
             loading,
@@ -172,9 +191,21 @@ class NewPost extends Component {
                     {error}
                 </div>
 
+<<<<<<< HEAD
                 {loading ? (<LoaderWithBackDrop loading={this.state.loading}/>) : null}
                 {displayImgs}
                 {this.newPostForm(title, body)}
+=======
+                {loading ? (
+                    <div className="jumbotron text-center">
+                        <h2>Loading...</h2>
+                    </div>
+                ) : (
+                    ""
+                )}
+
+                {this.newPostForm(title, body, price)}
+>>>>>>> add to cartcart and price
             </div>
         );
     }

@@ -12,6 +12,7 @@ class EditPost extends Component {
             id: "",
             title: "",
             body: "",
+            price: 0,
             redirectToProfile: false,
             photos: [],
             error: "",
@@ -36,6 +37,7 @@ class EditPost extends Component {
                     error: "",
                     photos:data.photos,
                     numbExistingPics:data.photos.length
+                    price: data.price,
                 });
             }
         });
@@ -48,7 +50,7 @@ class EditPost extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize, photos } = this.state;
+        const { title, body, fileSize, price, photos } = this.state;
         if(photos.length>10){
             this.setState({ error: "Max 10 images can be uploaded in a post. Please select fewer files." , loading: false});
             return false;
@@ -68,6 +70,10 @@ class EditPost extends Component {
         }
         if (body.length === 0) {
             this.setState({ error: "Body is required", loading: false });
+            return false;
+        }
+        if (price < 0) {
+            this.setState({ error: "Price should be greater than zero", loading: false });
             return false;
         }
         return true;
@@ -116,8 +122,12 @@ class EditPost extends Component {
                         loading: false,
                         title: "",
                         body: "",
+<<<<<<< HEAD
                         photos:[],
                         fileSize:[],
+=======
+                        price: 0,
+>>>>>>> add to cartcart and price
                         redirectToProfile: true
                     });
                 }
@@ -142,10 +152,14 @@ class EditPost extends Component {
             this.setState({newImgs:modifyNewImgs}) 
         }
 
+<<<<<<< HEAD
         //remove img to be deleted from display 
         event.target.parentNode.remove()
     }
     editPostForm = (title, body) => (
+=======
+    editPostForm = (title, body, price) => (
+>>>>>>> add to cartcart and price
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>
@@ -177,6 +191,16 @@ class EditPost extends Component {
                 />
             </div>
 
+            <div className="form-group">
+                <label className="text-muted">Price</label>
+                <textarea
+                    onChange={this.handleChange("price")}
+                    type="number"
+                    className="form-control"
+                    value={price}
+                />
+            </div>
+
             <button
                 onClick={this.clickSubmit}
                 className="btn btn-raised btn-primary"
@@ -190,6 +214,7 @@ class EditPost extends Component {
         const {
             title,
             body,
+            price,
             redirectToProfile,
             error,
             loading
@@ -233,7 +258,7 @@ class EditPost extends Component {
                     {displayImgs}
                 </div>
 
-                {this.editPostForm(title, body)}
+                {this.editPostForm(title, body, price)}
             </div>
         );
     }

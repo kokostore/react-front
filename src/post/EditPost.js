@@ -18,6 +18,9 @@ class EditPost extends Component {
             loading: false,
             fileSize: [],
             user: {},
+            numbExistingPics:0,
+            removeImgs:[],
+            newImgs:[]
         };
     }
 
@@ -31,7 +34,8 @@ class EditPost extends Component {
                     title: data.title,
                     body: data.body,
                     error: "",
-                    photos:data.photos
+                    photos:data.photos,
+                    numbExistingPics:data.photos.length
                 });
             }
         });
@@ -74,14 +78,13 @@ class EditPost extends Component {
         let value; 
         if(name === "photos"){
             if(event.target.files.length){
-                let sizes=[],showSelected=[];
-                this.postData.delete('photos');
+                let sizes=[],showSelected=[...this.state.photos],selectedNewImgs=[];
                 for(let file=0; file<event.target.files.length;file++){
                         sizes.push(event.target.files[file].size)
-                        this.postData.append('photos', event.target.files[file]);
-                        showSelected[file]={link:URL.createObjectURL(event.target.files[file])};
+                        selectedNewImgs.push(event.target.files[file]);
+                        showSelected.push({link:URL.createObjectURL(event.target.files[file])});
                     }
-                this.setState({photos:showSelected,fileSize:sizes})
+                this.setState({photos:showSelected,fileSize:sizes,newImgs:selectedNewImgs})
             }
         }
         else{
@@ -94,6 +97,13 @@ class EditPost extends Component {
     clickSubmit = event => {
         event.preventDefault();
         this.setState({ loading: true });
+
+        //only append imgs not removed by user (value at removed indices is null) 
+        for(let img of this.state.newImgs){
+            if(img)
+                this.postData.append('photos',img);
+        }
+        this.postData.append("removeImgs",this.state.removeImgs)
 
         if (this.isValid()) {
             const postId = this.state.id;
@@ -114,7 +124,27 @@ class EditPost extends Component {
             });
         }
     };
+    removeImgHandler=(event)=>{
+        //capture the index(id) of image to be removed 
+        const delIndex=event.target.parentNode.getAttribute('id')
 
+        //if image to be removed already exists in DB, add it to 'removeImgs' to be passed to backend
+        if(delIndex<this.state.numbExistingPics){
+            let delImgs=[...this.state.removeImgs]
+            delImgs.push(delIndex)
+            this.setState({removeImgs:delImgs})
+        }
+        //if currently uploaded image is to be removed, simply make value at its index null
+        else{
+            let modifyNewImgs=[]
+            modifyNewImgs=[...this.state.newImgs]
+            modifyNewImgs[delIndex-this.state.numbExistingPics]=null    
+            this.setState({newImgs:modifyNewImgs}) 
+        }
+
+        //remove img to be deleted from display 
+        event.target.parentNode.remove()
+    }
     editPostForm = (title, body) => (
         <form>
             <div className="form-group">
@@ -173,16 +203,18 @@ class EditPost extends Component {
         if(this.state.photos.length)
         for(let i=0;i<this.state.photos.length;i++){
             displayImgs.push(
-                <img
-                    style={{ height: "200px", width: "auto" }}
-                    className="img-thumbnail"
-                    src={`${this.state.photos.length?
-                        this.state.photos[i].link:`${DefaultPost}`
-                    }`}
-                    onError={i => (i.target.src = `${DefaultPost}`)}
-                    alt={title+' image '+i}
-                    key={i}
-                />
+                <div style={{display:'flex',flexFlow:'column',alignItems:'flex-end',cursor:'pointer'}} id={i} key={i}>
+                    <div onClick={this.removeImgHandler}>X</div>
+                    <img
+                        style={{ height: "200px", width: "auto" }}
+                        className="img-thumbnail"
+                        src={`${this.state.photos.length?
+                            this.state.photos[i].link:`${DefaultPost}`
+                        }`}
+                        onError={i => (i.target.src = `${DefaultPost}`)}
+                        alt={title+' image '+i}
+                    />
+                </div>
             )
         }
         return (
@@ -197,8 +229,9 @@ class EditPost extends Component {
                 </div>
 
                 {loading ? (<LoaderWithBackDrop loading={this.state.loading} />) : null}
-
-                {displayImgs}
+                <div style={{display:'flex'}}>
+                    {displayImgs}
+                </div>
 
                 {this.editPostForm(title, body)}
             </div>

@@ -5,7 +5,8 @@ const PageLoader=(props)=>{
     const loaderStyling={
         position:'fixed',
         top:'50vh',
-        left:'40vw',
+        left:window.innerWidth>500?'45vw':'20vw',
+        width:'fit-content',
         zIndex:'99999'
     }
     return(
@@ -20,7 +21,8 @@ const ComponentLoader=(props)=>{
     const loaderStyling={
         position:'relative',
         top:'8vh',
-        left:'40vw',
+        left:window.innerWidth>500?'30vw':'20vw',
+        width:'fit-content',
         zIndex:'99999'
     }
     return(
@@ -36,7 +38,8 @@ const LoaderWithBackDrop=(props)=>{
     const loaderStyling={
         position:'fixed',
         top:'50vh',
-        left:'40vw',
+        left:window.innerWidth>500?'45vw':'20vw',
+        width:'fit-content',
         zIndex:'99999'
     }
     return (

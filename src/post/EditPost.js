@@ -4,6 +4,7 @@ import { isAuthenticated } from "../auth";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/mountains.jpg";
 import { LoaderWithBackDrop } from "../styles/Loader";
+import * as Icons from 'react-feather';
 
 class EditPost extends Component {
     constructor() {
@@ -148,10 +149,11 @@ class EditPost extends Component {
             modifyNewImgs[delIndex-this.state.numbExistingPics]=null    
             this.setState({newImgs:modifyNewImgs}) 
         }
+
         //remove img to be deleted from display 
         event.target.parentNode.remove()
     }
-    editPostForm = (title, body, price) => (
+    editPostForm = (title, body) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>
@@ -189,7 +191,7 @@ class EditPost extends Component {
                     onChange={this.handleChange("price")}
                     type="number"
                     className="form-control"
-                    value={price}
+                    value={this.state.price}
                 />
             </div>
 
@@ -221,7 +223,7 @@ class EditPost extends Component {
         for(let i=0;i<this.state.photos.length;i++){
             displayImgs.push(
                 <div style={{display:'flex',flexFlow:'column',alignItems:'flex-end',cursor:'pointer'}} id={i} key={i}>
-                    <div onClick={this.removeImgHandler}>X</div>
+                    <div onClick={this.removeImgHandler}><Icons.X size={20} color='#000'/></div>
                     <img
                         style={{ height: "200px", width: "auto" }}
                         className="img-thumbnail"

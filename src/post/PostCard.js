@@ -50,28 +50,55 @@ const PostCard=(props)=> {
         );
     };
 
-    const handleChange = postId => event => {
-        setCount(event.target.value < 1 ? 1 : event.target.value);
-        if(event.target.value >=1) {
-            updateItem(postId, event.target.value);
+    const handleChange = (postId,operation) => event => {
+        let quantity=event.target.parentNode.children[1].innerText
+        operation==='add'?quantity++:quantity--
+        setCount(quantity < 1 ? 1 : quantity);
+        if(quantity >=1) {
+            updateItem(postId, quantity);
         }
     };
 
     const showCartUpdateOptions = cartUpdate => {
+        const buttonStyles={
+            height:'fit-content',
+            width:'5vh',
+            cursor:'pointer',
+            padding:'0.5vh',
+            fontSize:'5vh',
+            textAlign:'center',
+            lineHeight:'5vh'
+        }
+        const buttonContainerStyles={
+            display:'flex',
+            boxSizing:'border-box',
+            alignItems:'center',
+            fontSize:'3vh',
+            maxHeight:'fit-content',
+            margin:'auto',
+            maxWidth:'fit-content',
+            textAlign:'center',
+            border:'2px solid black',
+            borderRadius:'50px',
+        }
         return (
         cartUpdate && (
-            <div className="input-group mb-3">
-                <div className="input-group-prepend">
+            <>
+                <div >
                     <span className="input-group-text"> Adjust Quantity </span>
                 </div> 
-                <input type="number" className="form-control"  value={count} onChange={handleChange(post._id)}/>
-            </div>
+                <div style={{...buttonContainerStyles}} >
+                    <div style={{...buttonStyles,borderRight:'1px solid black'}} onClick={handleChange(post._id,'reduce')}> - </div>
+                        <div style={{width:'5vh'}} id={props.i}>{count}</div>
+                    <div style={{...buttonStyles,borderLeft:'1px solid black'}} onClick={handleChange(post._id,'add')}> + </div>
+                </div>
+            </>
             )
         );
     };
 
     return(
-        <div className="card col-md-4" key={i}>
+        <div className={props.parent==='cart'?"card col-md-6":"card col-md-4"} key={i}>
             <div className="card-body">
             {shouldRedirect}
                 <img

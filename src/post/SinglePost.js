@@ -73,67 +73,63 @@ class SinglePost extends Component {
                     style={{
                         cursor:'pointer',
                         height: "10px",
-                        backgroundColor:'rgba(0,0,0,0.5)'
+                        // backgroundColor:'rgba(0,0,0,0.5)'
                         }}>
                 </li>
             )
         }
         let carousal=(
+        <>
         <div className="carousel">
-            <div style={{width:'5vw'}}>
-                {post.photos.length>1?
+            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-touch="true">
+            {post.photos.length>1?  
                 <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style={{position:'relative'}}>
-                    <div className="carousel-slider"><span className="carousel-control-prev-icon" aria-hidden="true" style={{verticalAlign:'middle '}}></span></div>
-                    <span className="sr-only">Previous</span>
+                        <div className="carousel-slider"><span className="carousel-control-prev-icon" aria-hidden="true" style={{verticalAlign:'middle '}}></span></div>
+                        <span className="sr-only">Previous</span>
                 </a>
-                :null}
-            </div>
-            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-touch="true" style={{display:'flex', flexFlow:'column'}}>
-                <div className="carousel-inner" >
-                    <div className="carousel-item active"  style={{width: '100%',height: '100%'}}>
+                 :null}
+                <div className="carousel-inner">
+                    <div className="carousel-item active">
                     <img className="d-block h-100"
-                            src={`${post.photos.length?
-                                post.photos[0].link:`${DefaultPost}`
-                            }`}
-                            alt={post.title}
-                            onError={i => (i.target.src = `${DefaultPost}`)}
-                        />
+                        src={`${post.photos.length?
+                            post.photos[0].link:`${DefaultPost}`
+                        }`}
+                        alt={post.title}
+                        onError={i => (i.target.src = `${DefaultPost}`)}
+                    />
                     </div>
                     {postImgs} 
                 </div>
-                <div>
-                    {post.photos.length>1?
-                    <ol className="carousel-indicators" style={{backgroundColor:'rgba(255,255,255,0.7)',width:'fit-content',margin:'auto',padding:'1vh'}}>
-                        <li data-target="#carouselExampleIndicators" 
-                            data-slide-to="0" 
-                            className="active" 
-                            style={{
-                                cursor:'pointer',
-                                height: "10px",
-                                backgroundColor:'rgba(0,0,0,0.5)'
-                                }}>
-                        </li>
-                        {indicators}
-                    </ol>
-                    :null}
-                </div>
-            </div>
-            
-            <div style={{width:'5vw'}}> 
                 {post.photos.length>1?
                 <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" style={{position:'relative'}}>
                     <div className="carousel-slider"><span className="carousel-control-next-icon" aria-hidden="true" style={{verticalAlign:'middle '}}></span></div>
                     <span className="sr-only" >Next</span>
                 </a>
-                :null}
+                :null}            
+            <div style={{position:"absolute",width:'inherit',padding:'auto',marginTop:'48vh'}}>
+                {post.photos.length>1?
+                    <ol className="carousel-indicators" style={{width:'fit-content',padding:'1vh',backgroundColor:'rgba(0,0,0,1)',margin:'auto'}}>
+                        <li data-target="#carouselExampleIndicators" 
+                            data-slide-to="0" 
+                            className="active"
+                            style={{
+                                cursor:'pointer',
+                                height: "10px",
+                            
+                            }}>
+                        </li>
+                        {indicators}
+                    </ol>
+                    :null}
             </div>
-                </div>
-        )
-        
+        </div>
+        </div>
+    </>
+        ) 
         return (
             <div className="card-body"> 
                 {carousal}
-                <p className="card-text">{post.body}</p>
+                <p className="card-text" style={{marginTop:'10vh'}}>{post.body}</p>
                 <br />
                 <p className="font-italic mark">
                     Posted by <Link to={`${posterId}`}>{posterName} </Link>

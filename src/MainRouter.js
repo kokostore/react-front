@@ -32,7 +32,7 @@ const MainRouter = () => (
             />
 
             <PrivateRoute exact path="/user/:userId" component={Profile} />
-            <Route exact path="/cart" exact component={Cart} />
+            <Route exact path="/cart" component={Cart} />
         </Switch>
     </div>
 );

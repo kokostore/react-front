@@ -16,9 +16,11 @@ const Cart = () => {
 			<div>
 			    <h2>Your cart has {`${items.length}`} items</h2>
 			    <hr/>
+				<div className="row">
 			    {items.map((post, i) => (
-			    	<PostCard post={post} i={i} showAddToCartButton={false} cartUpdate={true} showRemoveProductButton={true} />
+			    	<PostCard parent="cart" post={post} i={i} showAddToCartButton={false} cartUpdate={true} showRemoveProductButton={true} />
 			    	))}
+			    </div>
 			</div>
 
 		);
@@ -33,18 +35,18 @@ const Cart = () => {
 	return (
 	<div className="container">
     	<div className="row">
-    	    <div className="col-6">
+    	    <div className="col-md-6">
     	    {items.length > 0 ? showItems(items) : noItemsMessage()}
     	    </div>
 
-    	    <div className="col-6">
+    	    <div className="col-md-6">
     	        <h2 className="mb-4"> Your cart summary </h2>
     	        <hr />
     	        <Checkout products={items} />
-    	    <p>
+    	    {/* <p>
     	        show checkout options / shipping address / total / update
     	        quantity
-    	    </p>
+    	    </p> */}
     	    </div>
 
 	    </div>

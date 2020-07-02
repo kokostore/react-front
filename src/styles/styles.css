@@ -16,10 +16,6 @@
     height: inherit; 
 }
 
-.active{
-    background-color: black!important;
-}
-
 .carousel-item.active{
     background-color: transparent!important;
 }
@@ -32,11 +28,13 @@
 }
 
 .carousel-control-prev{
-    margin-right: 5vw;
+    margin-right: -5vw;
+    z-index: 9999;
 }
 
 .carousel-control-next{
-    margin-left: 5vw;
+    margin-left: -5vw;
+    z-index: 9999;
 }
 
 .carousel{
@@ -44,13 +42,35 @@
     justify-content:center;
     align-items:center;
     width: 100%;
+    margin: auto;
 }
 
-@media (max-width:900px){  
+@media (max-width:850px){  
     .carousel{
         width:100%;
     }
     #carouselExampleIndicators{
-        width: 60vw; 
+        width: 70vw; 
+    }
+    .carousel-control-prev{
+        margin-right: -13vw;
+        z-index: 9999;
+    }
+    
+    .carousel-control-next{
+        margin-left: -13vw;
+        z-index: 9999;
+    }
+}
+@media (min-width:850px) and (max-width:1200px){  
+
+    .carousel-control-prev{
+        margin-right: -9vw;
+        z-index: 9999;
+    }
+    
+    .carousel-control-next{
+        margin-left: -9vw;
+        z-index: 9999;
     }
 }

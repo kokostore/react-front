@@ -4,6 +4,7 @@ import { isAuthenticated } from "../auth";
 import { Redirect } from "react-router-dom";
 import DefaultPost from "../images/mountains.jpg";
 import { LoaderWithBackDrop } from "../styles/Loader";
+import * as Icons from 'react-feather';
 
 class EditPost extends Component {
     constructor() {
@@ -222,7 +223,7 @@ class EditPost extends Component {
         for(let i=0;i<this.state.photos.length;i++){
             displayImgs.push(
                 <div style={{display:'flex',flexFlow:'column',alignItems:'flex-end',cursor:'pointer'}} id={i} key={i}>
-                    <div onClick={this.removeImgHandler}>X</div>
+                    <div onClick={this.removeImgHandler}><Icons.X size={20} color='#000'/></div>
                     <img
                         style={{ height: "200px", width: "auto" }}
                         className="img-thumbnail"
